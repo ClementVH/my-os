@@ -10,13 +10,13 @@
 VESA_READ_OFFSET equ 0x1000
 load_vesa_info_sector:
   mov bx, 0x1000              ; load vesa info sectors to memory addr 0x1000
-  mov dh, 4                   ; load 4 sectors
+  mov dh, 10                  ; load 10 sectors
   mov cl, 0x02                ; start from sector 2 (exclude 1st sector ie: boot sector)
   call disk_load              ; call disk load routine
 
   call VESA_READ_OFFSET
 
-KERNEL_OFFSET equ 0x1000
+KERNEL_OFFSET equ 0x2800
 load_kernel:
   mov bx, NEW_LINE
   call print_string           ; print new line
@@ -40,7 +40,7 @@ load_kernel:
 %include "boot/protected-mode/gdt.asm"
 %include "boot/protected-mode/switch_to_pm.asm"
 
-[bits 32]:
+[bits 32]
 ; Arrive here after switching and initializing pm
 BEGIN_PM:
   mov ebx, MSG_PROT_MODE
