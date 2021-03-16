@@ -37,6 +37,7 @@ $(BUILDDIR)/os.img: $(BUILDDIR)/os-image
 run: $(BUILDDIR)/os.img
 	qemu-system-i386 \
 		-m	 4m \
+		-d int \
 		-no-shutdown -no-reboot \
 		$<
 

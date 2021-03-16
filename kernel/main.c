@@ -51,7 +51,7 @@ struct IDT_entry{
   unsigned short offset_high;
 };
 
-struct IDT_entry IDT[256];
+extern void* IDT;
 
 void idt_init(void)
 {
@@ -59,13 +59,15 @@ void idt_init(void)
   unsigned int idt_address;
   unsigned int idt_ptr[2];
 
+  struct IDT_entry* IDT_PTR = IDT;
+
   /* populate IDT entry of keyboard's interrupt */
-  keyboard_address = (unsigned int) keyboard_handler;
-  IDT[0x21].offset_low = (unsigned short)(((unsigned int)keyboard_handler & 0x0000ffff));
-  IDT[0x21].offset_high = (unsigned short)(((unsigned int)keyboard_handler & 0xffff0000) >> 16);
-  IDT[0x21].reserved = 0;
-  IDT[0x21].segment_selector = 0x08;
-  IDT[0x21].attr = 0x8e;
+  // keyboard_address = (unsigned int) keyboard_handler;
+  IDT_PTR[0x21].offset_low = (unsigned short)(((unsigned int)keyboard_handler & 0x0000ffff));
+  IDT_PTR[0x21].offset_high = (unsigned short)(((unsigned int)keyboard_handler & 0xffff0000) >> 16);
+  IDT_PTR[0x21].reserved = 0;
+  IDT_PTR[0x21].segment_selector = 0x08;
+  IDT_PTR[0x21].attr = 0x8e;
 
   /* ICW1 - begin initialization */
   write_port(0x20 , 0x11);
