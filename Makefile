@@ -20,9 +20,10 @@ $(BUILDDIR)/read_vesa.bin: $(BOOTSOURCES)
 
 $(BUILDDIR)/main.bin: $(BUILDDIR)/kernel_entry.o $(BUILDDIR)/main.o
 	ld -m elf_i386 -o $@ -Ttext 0x2800 --oformat binary $^
+	ld -m elf_i386 -o $(BUILDDIR)/main.elf -Ttext 0x2800 $^
 
 $(BUILDDIR)/main.o: $(SOURCEDIR)/main.c
-	gcc -fno-pie -ffreestanding -m32 -c $^ -o $@
+	gcc -fno-pie -g -ffreestanding -m32 -c $^ -o $@
 
 $(BUILDDIR)/os-image: $(BUILDDIR)/boot_sect.bin $(BUILDDIR)/read_vesa.bin $(BUILDDIR)/main.bin $(BUILDDIR)/padding.bin
 	cat $^ > $@
@@ -30,8 +31,14 @@ $(BUILDDIR)/os-image: $(BUILDDIR)/boot_sect.bin $(BUILDDIR)/read_vesa.bin $(BUIL
 $(BUILDDIR)/kernel_entry.o: $(BOOTDIR)/kernel_entry.asm
 	nasm $< -f elf -o $@
 
-run: $(BUILDDIR)/os-image
-	qemu-system-x86_64 -m 2G $<
+$(BUILDDIR)/os.img: $(BUILDDIR)/os-image
+	dd if=$< of=$@ bs=512 count=2K
+
+run: $(BUILDDIR)/os.img
+	qemu-system-i386 \
+		-m	 4m \
+		-no-shutdown -no-reboot \
+		$<
 
 clean:
 	rm build/*
