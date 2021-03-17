@@ -7,7 +7,6 @@ global read_port
 global write_port
 global load_idt
 global keyboard_handler
-global IDT
 
 call main
 
@@ -30,31 +29,8 @@ load_idt:
   sti
   ret
 
-times 512 -($-$$) db 0
-
 keyboard_handler:
   pushad
-  cli
-  call keyboard_handler_main
-  sti
+  jmp keyboard_handler_main
   popad
   iretd
-
-IDT:
-  times 256 dw 0
-  times 256 dw 0
-  times 256 db 0
-  times 256  db 0
-  times 256  dw 0
-
-  ; dw 0x2800 + 0x200
-  ; dw 0x8
-  ; db 0
-  ; db 0x8e
-  ; dw 0
-
-  ; times 256 - 0x22 dw 0
-  ; times 256 - 0x22 dw 0
-  ; times 256 - 0x22 db 0
-  ; times 256 - 0x22  db 0
-  ; times 256 - 0x22  dw 0

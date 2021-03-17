@@ -1,73 +1,30 @@
-struct VBE_MODE_INFO {
-  unsigned short attributes;
-  unsigned char window_a;
-  unsigned char window_b;
-  unsigned short granularity;
-  unsigned short window_size;
-  unsigned short segment_a;
-  unsigned short segment_b;
-  unsigned short win_func_ptr_high;
-  unsigned short win_func_ptr_low;
-
-  unsigned short pitch;
-  unsigned short width;
-  unsigned short height;
-
-  unsigned char x_char;
-  unsigned char y_char;
-  unsigned char planes;
-
-  unsigned char bpp;
-
-  unsigned char banks;
-  unsigned char memory_model;
-  unsigned char bank_size;
-  unsigned char image_pages;
-  unsigned char reverved0;
-
-  unsigned char red_mask;
-  unsigned char red_position;
-  unsigned char green_mask;
-  unsigned char green_position;
-  unsigned char blue_mask;
-  unsigned char blue_position;
-  unsigned char reserved_mask;
-  unsigned char reserved_position;
-  unsigned char direct_color_attributes;
-
-  unsigned int framebuffer;
-};
+#include "./main.h"
 
 extern void keyboard_handler(void);
 extern char read_port(unsigned short port);
 extern void write_port(unsigned short port, unsigned char data);
-extern void load_idt(unsigned int *idt_ptr);
+extern void load_idt(unsigned int idt_ptr);
 
-struct IDT_entry{
+struct idt_entry {
   unsigned short offset_low;
   unsigned short segment_selector;
   unsigned char reserved;
   unsigned char attr;
   unsigned short offset_high;
-};
+} __attribute__((__packed__)) IDT[256];
 
-extern void* IDT;
+struct idt_descriptor {
+  unsigned short limit;
+  unsigned int base;
+} __attribute__((__packed__)) IDT_DESCRIPTOR;
 
-void idt_init(void)
-{
-  unsigned int keyboard_address;
-  unsigned int idt_address;
-  unsigned int idt_ptr[2];
-
-  struct IDT_entry* IDT_PTR = IDT;
-
-  /* populate IDT entry of keyboard's interrupt */
-  // keyboard_address = (unsigned int) keyboard_handler;
-  IDT_PTR[0x21].offset_low = (unsigned short)(((unsigned int)keyboard_handler & 0x0000ffff));
-  IDT_PTR[0x21].offset_high = (unsigned short)(((unsigned int)keyboard_handler & 0xffff0000) >> 16);
-  IDT_PTR[0x21].reserved = 0;
-  IDT_PTR[0x21].segment_selector = 0x08;
-  IDT_PTR[0x21].attr = 0x8e;
+void idt_init(void) {
+  unsigned int toto = keyboard_handler;
+  IDT[0x21].offset_low = (unsigned short)(((unsigned int)&keyboard_handler & 0x0000ffff));
+  IDT[0x21].offset_high = (unsigned short)(((unsigned int)&keyboard_handler & 0xffff0000) >> 16);
+  IDT[0x21].reserved = 0;
+  IDT[0x21].segment_selector = 0x08;
+  IDT[0x21].attr = 0x8e;
 
   /* ICW1 - begin initialization */
   write_port(0x20 , 0x11);
@@ -85,21 +42,18 @@ void idt_init(void)
   write_port(0x21 , 0x00);
   write_port(0xA1 , 0x00);
 
-  // /* ICW4 - environment info */
+  /* ICW4 - environment info */
   write_port(0x21 , 0x01);
   write_port(0xA1 , 0x01);
-  /* Initialization finished */
 
   /* mask interrupts */
   write_port(0x21 , 0xff);
   write_port(0xA1 , 0xff);
 
-  /* fill the IDT descriptor */
-  idt_address = (unsigned int) IDT;
-  idt_ptr[0] = (sizeof (struct IDT_entry) * 256) - 1;
-  idt_ptr[1] = idt_address;
+  IDT_DESCRIPTOR.limit = (sizeof (struct idt_entry) * 256) - 1;
+  IDT_DESCRIPTOR.base = &IDT;
 
-  load_idt(idt_ptr);
+  load_idt((unsigned int) &IDT_DESCRIPTOR);
   write_port(0x21 , 0xFD);
 }
 
