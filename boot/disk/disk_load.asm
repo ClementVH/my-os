@@ -1,3 +1,4 @@
+[bits 16]
 ; load DH  sectors  to ES:BX from  drive  DL
 disk_load:
   mov dl, [BOOT_DRIVE]

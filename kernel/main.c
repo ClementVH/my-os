@@ -38,7 +38,7 @@ struct VBE_MODE_INFO {
   unsigned int framebuffer;
 };
 
-void _start() {
+void main() {
   struct VBE_MODE_INFO* modeInfo = (struct VBE_MODE_INFO*) 0x1800;
 
   char* framebuffer = (char*) modeInfo->framebuffer;

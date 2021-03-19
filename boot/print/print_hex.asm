@@ -1,3 +1,5 @@
+[bits 16]
+section .text
 print_hex:
   pusha                   ; store registers on the stack
   mov cx, 0x4             ; init counter to 4
@@ -35,4 +37,5 @@ done:
   popa
   ret
 
+section .data
 HEX_OUT: db '0x0000 ', 0
