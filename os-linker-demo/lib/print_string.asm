@@ -1,5 +1,4 @@
 [bits 16]
-section .boottext
 print_char:
   pusha
   mov ah, 0x0e

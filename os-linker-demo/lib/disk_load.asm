@@ -1,6 +1,5 @@
 [bits 16]
 ; load DH  sectors  to ES:BX from  drive  DL
-section .boottext
 disk_load:
   mov dl, [BOOT_DRIVE]
   push dx                   ; Store  DX on  stack  so  later  we can  recall

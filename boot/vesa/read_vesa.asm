@@ -11,8 +11,8 @@ load_vesa_bios_info:
 ;   cmp ax, 0x004f              ; on success 0x should be 0x004f
 ;   je load_vesa_info_success   ; if success jump to success
 
-;   mov bx, ERROR_VBE
-;   call print_string           ; print error message
+  mov bx, ERROR_VBE
+  call print_string           ; print error message
 
 ; load_vesa_info_success:
 ;   mov bx, NEW_LINE
@@ -98,8 +98,8 @@ load_vesa_bios_info:
   ; ;     call print_string
   ; ;     jmp $
 
-%include "boot/print/print_string.asm"
-%include "boot/print/print_hex.asm"
+%include "boot/vesa/print/print_string.asm"
+%include "boot/vesa/print/print_hex.asm"
 
 ERROR_VBE: db "Error VBE", 0
 VESA_INFO_SUCCESS: db "VESA INFO SUCCESS", 0

@@ -1,5 +1,5 @@
 [bits 16]
-section .text
+section .boottext
   ; mov ax, 0x0
   ; mov cs, ax
   ; mov ds, ax
@@ -21,10 +21,6 @@ section .text
   mov dh, 10                  ; load 10 sectors
   mov cl, 0x02                ; start from sector 2 (exclude 1st sector ie: boot sector)
   call disk_load              ; call disk load routine
-
-  ; mov ax, 0x0
-  ; mov ds, ax
-  ; call [ds:0x8c00]
 
   mov dx, 0xFACE
   call print_hex

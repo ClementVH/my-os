@@ -1,5 +1,5 @@
 [bits 16]
-section .boottext
+section .text
 print_hex:
   pusha                   ; store registers on the stack
   mov cx, 0x4             ; init counter to 4
