@@ -18,6 +18,9 @@ mov dh, 0x00                ; Select head 0
 
 int 0x13                    ; Call interrupt 'disk load'
 
+xor ax, ax                  ; Reset ES
+mov es, ax
+
 jmp 0x08C0:0x0000           ; Far jump
 
 ; Variables
