@@ -1,7 +1,7 @@
 [bits 16]
-[org 0x7c00]                ; HOW ?
+BOOT_ADDR equ 0x7C00
 
-mov ax, 0x7C00
+mov ax, 0x07C0
 mov ds, ax
 mov es, ax
 
@@ -23,9 +23,9 @@ mov eax, cr0                ; Get the value currently in cr0
 or eax, 0x1                 ; Set the first bit
 mov cr0, eax                ; Make the actual switch to protected mode
 
-jmp CODE_SEG:init_pm        ; Make a far jump to our 32 bit code. This forces the CPU to flush its cache of prefetched
-                            ; and real mode decoded instructions. This also sets cs to be the CODE_SEG which is what
-                            ; we will do for all the data segment registers(far jmp is cs:ip so this is like mov cs, CODE_SEG)
+jmp CODE_SEG:(init_pm + BOOT_ADDR)              ; Make a far jump to our 32 bit code. This forces the CPU to flush its cache of prefetched
+                                                ; and real mode decoded instructions. This also sets cs to be the CODE_SEG which is what
+                                                ; we will do for all the data segment registers(far jmp is cs:ip so this is like mov cs, CODE_SEG)
 
 [bits 32]
 ; Init the stack and registers once in pm
