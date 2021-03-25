@@ -1,8 +1,5 @@
 [bits 16]
-
-; Set DS register to where we are loaded in memory
-mov ax, 0x08C0
-mov ds, ax
+[org 0x8c00]
 
 mov bx, HELLO_WORLD
 call print_string

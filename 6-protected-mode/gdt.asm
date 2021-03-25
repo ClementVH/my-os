@@ -33,7 +33,7 @@ gdt_end: ; This is to let the assembler calculate the size of the gdt for the gd
 
 gdt_descriptor:
 	dw gdt_end - gdt_start - 1		; Size of our GDT, one less than the true size
-	dd gdt_start + BOOT_ADDR 					; Start address of our GDT
+	dd gdt_start				 					; Start address of our GDT
 
 
 ; Useful constants to put in the segment registers so that the CPU knows what segment we want to use

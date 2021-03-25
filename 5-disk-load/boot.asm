@@ -1,8 +1,5 @@
 [bits 16]
-
-; set DS register to where we are loaded in memory
-mov ax, 0x07C0
-mov ds, ax
+[org 0x7c00]
 
 mov [BOOT_DRIVE], dl        ; BIOS stores the boot drive in dl
 

@@ -1,4 +1,5 @@
 [bits 16]
+[org 0x7c00]
 
 mov al, 'H'
 mov ah, 0x0e
