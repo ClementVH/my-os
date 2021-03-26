@@ -3,17 +3,18 @@ SOURCES = $(wildcard *.asm)
 OBJ = $(patsubst %.asm,build/%.o,$(SOURCES))
 
 all: clean build
-	qemu-system-x86_64 $(BUILDDIR)/os-image.bin
+	qemu-system-x86_64 $(BUILDDIR)/os-image.img
 
-build: $(BUILDDIR)/os-image.bin
+build: $(BUILDDIR)/os-image.img
 
 clean:
-	-rm build/*
+	mkdir -p build
+	-@rm build/* 2>/dev/null || true
 
 # MAIN #
-$(BUILDDIR)/%.o: %.asm
+$(BUILDDIR)/%.bin: %.asm
 	nasm $^ -o $@ -f bin
 
-$(BUILDDIR)/%.bin: $(BUILDDIR)/boot.o
+$(BUILDDIR)/%.img: $(BUILDDIR)/boot.bin
 	cat $^ > $@
 	truncate -s 3k $@
