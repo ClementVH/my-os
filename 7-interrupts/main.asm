@@ -1,5 +1,5 @@
 [bits 32]
-[org 0x1000]
+[org 0x2000]
 
 mov edx, 0x20
 mov al, 0x11

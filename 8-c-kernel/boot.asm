@@ -3,7 +3,7 @@
 
 mov [BOOT_DRIVE], dl        ; BIOS stores the boot drive in dl
 
-mov bx, 0x1000              ; Load sectors to '0x07C0:0x1000'
+mov bx, 0x2000              ; Load sectors to '0x07C0:0x2000'
 mov ah, 0x02                ; Select function 'Read sectors'
 mov al, 0x08                ; Read 8 sectors
 mov ch, 0x00                ; Select cylinder 0
@@ -36,7 +36,7 @@ init_pm:
 
   mov ebp, 0x90000          ; move stack position to be right at the top of the free space
 
-  call 0x1000
+  call 0x2000
 
 %include "gdt.asm"
 

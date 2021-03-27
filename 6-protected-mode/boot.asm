@@ -3,7 +3,7 @@
 
 mov [BOOT_DRIVE], dl        ; BIOS stores the boot drive in dl
 
-mov bx, 0x1000              ; Load sectors to '0x07C0:0x1000'
+mov bx, 0x2000              ; Load sectors to '0x07C0:0x2000'
 mov ah, 0x02                ; Select function 'Read sectors'
 mov al, 0x01                ; Read 1 sector
 mov ch, 0x00                ; Select cylinder 0

@@ -21,7 +21,7 @@ $(BUILDDIR)/kernel_entry.o: kernel_entry.asm
 
 # MAIN #
 $(BUILDDIR)/main.bin: $(BUILDDIR)/kernel_entry.o $(BUILDDIR)/kernel.o
-	ld -m elf_i386 -o $@ -Ttext 0x1000 --oformat binary $^
+	ld -m elf_i386 -o $@ -Ttext 0x2000 --oformat binary $^
 
 # BOOT #
 $(BUILDDIR)/%.bin: %.asm
