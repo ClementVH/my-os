@@ -30,4 +30,4 @@ $(BUILDDIR)/%.bin: %.asm
 # IMAGE #
 $(BUILDDIR)/%.img: $(BUILDDIR)/boot.bin $(BUILDDIR)/main.bin
 	cat $^ > $@
-	truncate -s 3k $@
+	truncate -s 1m $@

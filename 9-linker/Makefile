@@ -6,7 +6,7 @@ all: $(BUILDDIR)/os-image.img
 # IMAGE #
 $(BUILDDIR)/%.img: bootloader kernel
 	cat bootloader/build/bootloader.img kernel/build/kernel.img > $@
-	truncate -s 3k $@
+	truncate -s 1m $@
 
 bootloader:
 	make -C bootloader

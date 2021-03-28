@@ -17,4 +17,4 @@ $(BUILDDIR)/%.bin: %.asm
 
 $(BUILDDIR)/%.img: $(BUILDDIR)/boot.bin
 	cat $^ > $@
-	truncate -s 3k $@
+	truncate -s 1m $@
