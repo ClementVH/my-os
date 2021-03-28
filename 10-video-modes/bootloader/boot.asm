@@ -12,6 +12,8 @@ mov dh, 0x00                ; Select head 0
 
 int 0x13                    ; Call interrupt 'disk load'
 
+call 0x1000
+
 cli                         ; Switch off interrupts until we set up the protected mode interrupt vector
 lgdt [gdt_descriptor]       ; Load the global descriptor table which defines the protected mode segments
 
@@ -36,7 +38,6 @@ init_pm:
 
   mov ebp, 0x90000          ; move stack position to be right at the top of the free space
 
-  call 0x1000
   call 0x2000
 
   jmp $

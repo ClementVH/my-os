@@ -4,6 +4,9 @@ SECTIONS
   .text : {
     *(.text)
 
+    . = 0xC00;
+    *(.mode-infos)
+
     . = ALIGN(512 * 8);
   }
 }
