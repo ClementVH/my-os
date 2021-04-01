@@ -1,10 +1,11 @@
 SECTIONS
 {
-  . = 0x2000;
+  . = 0x1000;
   .text : {
     *(.text)
-    *(.data)
-    *(.bss)
+
+    . = 0xC00;
+    *(.mode-infos)
 
     . = ALIGN(512 * 8);
   }
