@@ -55,3 +55,8 @@ void swap() {
   struct VBE_MODE_INFO* modeInfo = (struct VBE_MODE_INFO*) 0x1C00;
   memcpy(modeInfo->framebuffer, buffer, modeInfo->width * modeInfo->height * 3 / 4);
 }
+
+void handle_keyboard() {
+  pos->x++;
+  pos->y++;
+}
