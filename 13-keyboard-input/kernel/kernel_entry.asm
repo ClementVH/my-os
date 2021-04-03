@@ -53,8 +53,6 @@ jmp $
 isr33:
 	pusha
 
-  in al, 0x64
-  in al, 0x60
   call handle_keyboard
 
 	popa
@@ -77,6 +75,12 @@ memcpy:
   mov ecx, [esp + 4 + 4 + 4]
   cld
   rep movsd
+  ret
+
+global inb
+inb:
+  mov edx, [esp + 4]
+  in al, dx
   ret
 
 %include "lib/idt.asm"

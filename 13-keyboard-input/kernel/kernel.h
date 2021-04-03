@@ -7,6 +7,15 @@ struct Position {
 
 struct Position* pos = (struct Position*) 0x5000;
 
+struct Controls {
+  char top;
+  char right;
+  char bottom;
+  char left;
+};
+
+struct Controls* controls = (struct Controls*) 0x6000;
+
 struct VBE_MODE_INFO {
   unsigned short attributes;
   unsigned char window_a;
