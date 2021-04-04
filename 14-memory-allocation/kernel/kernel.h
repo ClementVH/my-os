@@ -5,7 +5,7 @@ struct Position {
   int y;
 };
 
-struct Position* pos = (struct Position*) 0x5000;
+struct Position* pos;
 
 struct Controls {
   char top;
@@ -14,7 +14,15 @@ struct Controls {
   char left;
 };
 
-struct Controls* controls = (struct Controls*) 0x6000;
+struct Controls* controls;
+
+extern char inb(unsigned short port);
+extern void* memcpy(void* dest, void* src, unsigned int);
+
+char* buffer;
+
+void draw();
+void swap();
 
 struct VBE_MODE_INFO {
   unsigned short attributes;
@@ -55,3 +63,5 @@ struct VBE_MODE_INFO {
 
   unsigned int framebuffer;
 };
+
+struct VBE_MODE_INFO* modeInfo = (struct VBE_MODE_INFO*) 0x1C00;

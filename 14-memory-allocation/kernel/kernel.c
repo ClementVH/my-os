@@ -1,14 +1,11 @@
 #include "kernel.h"
-
-extern char inb(unsigned short port);
-extern void* memcpy(void* dest, void* src, unsigned int);
-
-char* buffer = (char*) 0xA00000;
-
-void draw();
-void swap();
+#include "lib/memory/memory.c"
 
 void main() {
+  buffer = (char*) malloc(sizeof(char) * modeInfo->width * modeInfo->height * 3);
+  pos = (struct Position*) malloc(sizeof(struct Position));
+  controls = (struct Controls*) malloc(sizeof(struct Controls));
+
   pos->x = 0;
   pos->y = 0;
   controls->top = 0;
@@ -23,7 +20,29 @@ void main() {
 }
 
 void draw_rect(int color, int x, int y, int width, int height) {
-  struct VBE_MODE_INFO* modeInfo = (struct VBE_MODE_INFO*) 0x1C00;
+
+  // prevent drawing outside buffer
+  if (x < 0) {
+    width = width + x;
+    x = 0;
+  }
+
+  if (x + width > modeInfo->width) {
+    width = modeInfo->width - x;
+  }
+
+  if (y < 0) {
+    height = height + y;
+    y = 0;
+  }
+
+  if (y + height > modeInfo->height) {
+    height = modeInfo->height - y;
+  }
+
+  if (width <= 0 || height <= 0) {
+    return;
+  }
 
   // Start at the top left corner of the rectangle
   char* first_row = (char*) (3 * (x + y * modeInfo->width) + buffer);
@@ -39,20 +58,18 @@ void draw_rect(int color, int x, int y, int width, int height) {
   }
 
   char* current_row = first_row;
-  for (int i = 0; i < width; i++) {
+  for (int i = 0; i < height; i++) {
     memcpy(current_row, first_row, width * 3 / 4);
     current_row += 3 * modeInfo->width;
   }
 }
 
 void draw() {
-  struct VBE_MODE_INFO* modeInfo = (struct VBE_MODE_INFO*) 0x1C00;
   draw_rect(0x000000, 0, 0, modeInfo->width, modeInfo->height);
   draw_rect(0xFFFFFF, pos->x, pos->y, 100, 100);
 }
 
 void swap() {
-  struct VBE_MODE_INFO* modeInfo = (struct VBE_MODE_INFO*) 0x1C00;
   memcpy(modeInfo->framebuffer, buffer, modeInfo->width * modeInfo->height * 3 / 4);
 }
 
@@ -73,28 +90,30 @@ void pit_loop() {
 
 void handle_keyboard() {
   short status = inb(0x64);
-  short code = inb(0x60);
-  char pressed = 1;
+  if (status & 0x01) {
+    short code = inb(0x60);
+    char pressed = 1;
 
-  if ((code & 128) == 128) {
-    pressed = 0;
-    code = code & 0x7F;
-  }
+    if ((code & 128) == 128) {
+      pressed = 0;
+      code = code & 0x7F;
+    }
 
-  switch (code) {
-    case 75:
-      controls->left = pressed;
-      break;
-    case 77:
-      controls->right = pressed;
-      break;
-    case 72:
-      controls->top = pressed;
-      break;
-    case 80:
-      controls->bottom = pressed;
-      break;
-    default:
-      break;
+    switch (code) {
+      case 75:
+        controls->left = pressed;
+        break;
+      case 77:
+        controls->right = pressed;
+        break;
+      case 72:
+        controls->top = pressed;
+        break;
+      case 80:
+        controls->bottom = pressed;
+        break;
+      default:
+        break;
+    }
   }
 }
