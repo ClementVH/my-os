@@ -2,9 +2,9 @@
 #include "lib/memory/memory.c"
 
 void main() {
-  buffer = (char*) malloc(sizeof(char) * modeInfo->width * modeInfo->height * 3);
-  pos = (struct Position*) malloc(sizeof(struct Position));
-  controls = (struct Controls*) malloc(sizeof(struct Controls));
+  buffer = (char*) malloc((uint) sizeof(char) * (uint) modeInfo->width * (uint) modeInfo->height * (uint) 3);
+  pos = (struct Position*) malloc((uint) sizeof(struct Position));
+  controls = (struct Controls*) malloc((uint) sizeof(struct Controls));
 
   pos->x = 0;
   pos->y = 0;

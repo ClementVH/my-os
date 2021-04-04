@@ -1,3 +1,4 @@
 #pragma once
 
-void* malloc(int size);
+void* malloc(unsigned int size);
+void free(void* ptr);
