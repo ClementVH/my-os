@@ -13,7 +13,7 @@ $(BUILDDIR)/%.bin: %.asm
 $(BUILDDIR)/%.bin: %.c $(SRC)
 	gcc -fno-pie -ffreestanding -m32 -c $< -o $@
 
-$(BUILDDIR)/%.elf: linker.ld $(OBJ_ASM) $(OBJ_C)
+$(BUILDDIR)/%.elf: linker.ld $(OBJ_ASM) $(OBJ_C) assets/s.o
 	ld -melf_i386 --build-id=none -o $@ -T $^
 
 $(BUILDDIR)/%.img: $(BUILDDIR)/%.elf

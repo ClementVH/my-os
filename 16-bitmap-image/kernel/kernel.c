@@ -1,7 +1,16 @@
 #include "kernel.h"
+#include "lib/idt/idt.c"
 #include "lib/memory/memory.c"
+#include "lib/bitmap/bitmap.c"
 
 void main() {
+  idt_start[32].addr_low    =   (unsigned short) (((uint) isr32 & 0x0000FFFF));
+  idt_start[32].addr_high   =   (unsigned short) (((uint) isr32 & 0xFFFF0000) >> 16);
+  idt_start[33].addr_low    =   (unsigned short) (((uint) isr33 & 0x0000FFFF));
+  idt_start[33].addr_high   =   (unsigned short) (((uint) isr33 & 0xFFFF0000) >> 16);
+
+  load_idt();
+
   buffer = (char*) malloc((uint) sizeof(char) * (uint) modeInfo->width * (uint) modeInfo->height * (uint) 3);
   pos = (struct Position*) malloc((uint) sizeof(struct Position));
   controls = (struct Controls*) malloc((uint) sizeof(struct Controls));
@@ -65,8 +74,9 @@ void draw_rect(int color, int x, int y, int width, int height) {
 }
 
 void draw() {
+  int color = bitmap_draw();
   draw_rect(0x000000, 0, 0, modeInfo->width, modeInfo->height);
-  draw_rect(0xFFFFFF, pos->x, pos->y, 100, 100);
+  draw_rect(color, pos->x, pos->y, 100, 100);
 }
 
 void swap() {

@@ -1,9 +1,33 @@
 [bits 32]
+[extern handle_keyboard]
+
+global isr33
+isr33:
+	pusha
+
+  call handle_keyboard
+
+	popa
+  mov edx, 0x20
+  mov al, 0x20
+  out dx, al
+	iret
+
+global isr32
+isr32:
+  call pit_loop
+  mov edx, 0x20
+  mov al, 0x20
+  out dx, al
+  iret
+
 ; IDT - Interrupts Descriptor Table
 
 idt_descriptor:
 	dw idt_end - idt_start - 1
 	dd idt_start
+
+global idt_start
 
 idt_start:
 irq0:
@@ -199,13 +223,13 @@ irq31:
   db 0x8e;
   dw 0x0000;
 irq32:
-  dw isr32;
+  dw 0x0000;
   dw 0x8;
   db 0x00;
   db 0x8e;
   dw 0x0000;
 irq33:
-  dw isr33;
+  dw 0x0000;
   dw 0x8;
   db 0x00;
   db 0x8e;

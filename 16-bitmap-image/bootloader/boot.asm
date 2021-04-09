@@ -3,16 +3,17 @@ section .text
 
 mov [BOOT_DRIVE], dl        ; BIOS stores the boot drive in dl
 
-mov bx, 0x1000              ; Load sectors to '0x07C0:0x1000'
+mov bx, 0xa000              ; Load sectors to '0x07C0:0x1000'
 mov ah, 0x02                ; Select function 'Read sectors'
-mov al, 0x10                ; Read 8 sectors
+mov al, 0x60                ; Read 8 sectors
 mov ch, 0x00                ; Select cylinder 0
 mov cl, 0x02                ; Select sector 2
 mov dh, 0x00                ; Select head 0
+mov dl, [BOOT_DRIVE]        ; Select head 0
 
 int 0x13                    ; Call interrupt 'disk load'
 
-call 0x1000
+call 0xa000
 
 cli                         ; Switch off interrupts until we set up the protected mode interrupt vector
 lgdt [gdt_descriptor]       ; Load the global descriptor table which defines the protected mode segments
@@ -38,7 +39,7 @@ init_pm:
 
   mov ebp, 0x90000          ; move stack position to be right at the top of the free space
 
-  call 0x2000
+  call 0xb000
 
   jmp $
 
