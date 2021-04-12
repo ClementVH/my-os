@@ -1,4 +1,5 @@
-#pragma once
+#ifndef KERNEL
+#define KERNEL
 
 struct Position {
   int x;
@@ -16,13 +17,15 @@ struct Controls {
 
 struct Controls* controls;
 
+typedef unsigned int uint;
+typedef unsigned int size_t;
+
 extern char inb(unsigned short port);
 extern void* memcpy(void* dest, void* src, unsigned int);
 
 char* buffer;
 
 void draw();
-void swap();
 
 struct VBE_MODE_INFO {
   unsigned short attributes;
@@ -65,3 +68,5 @@ struct VBE_MODE_INFO {
 };
 
 struct VBE_MODE_INFO* modeInfo = (struct VBE_MODE_INFO*) 0x1C00;
+
+#endif

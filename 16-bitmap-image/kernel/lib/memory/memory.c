@@ -1,8 +1,6 @@
+#include "../../kernel.h"
 #include "memory.h"
 #define START_ADDR 0x100000
-
-typedef unsigned int uint;
-typedef unsigned int size_t;
 
 struct MemoryBlock {
   uint size;

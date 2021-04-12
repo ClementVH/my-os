@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "Dockerfile-run": "dockerfile",
+    "Dockerfile-dev": "dockerfile",
+    "Dockerfile-build": "dockerfile",
+    "Dockerfile-nginx": "dockerfile",
+    "Dockerfile-httpd": "dockerfile",
+    "*.ejs": "html",
+    "Dockerfile-e2e": "dockerfile",
+    "kernel.h": "c"
+  }
+}
